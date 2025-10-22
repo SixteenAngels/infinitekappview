@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: /bin/sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/infinitek
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - JWT_SECRET=${JWT_SECRET:-changeme}
+      - API_PREFIX=/api
+      - CORS_ORIGINS=*
+      - USE_S3_OTA=${USE_S3_OTA:-false}
+      - S3_BUCKET=${S3_BUCKET:-}
+      - S3_REGION=${S3_REGION:-}
+      - S3_URL_EXPIRES=${S3_URL_EXPIRES:-900}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - mosquitto
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=infinitek
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+volumes:
+  db_data:
+  mosquitto_data:
+  mosquitto_log:

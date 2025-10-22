@@ -3,6 +3,7 @@ import { View, useWindowDimensions, Platform } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { LineChart } from 'react-native-chart-kit';
 import api, { API_BASE } from '../api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SensorDashboard({ route }: any) {
   const { device_id } = route.params as { device_id: string };
@@ -22,8 +23,10 @@ export default function SensorDashboard({ route }: any) {
       setValues(data.map((d) => d.value));
       setLabels(data.map((d) => new Date(d.created_at).toLocaleTimeString()));
       // live websocket
+      const token = await AsyncStorage.getItem('jwt_token');
       const wsUrlBase = API_BASE.replace(/^http/, 'ws');
-      const ws = new WebSocket(`${wsUrlBase}/ws/telemetry/${device_id}`);
+      const qs = token ? `?token=${encodeURIComponent(token)}` : '';
+      const ws = new WebSocket(`${wsUrlBase}/ws/telemetry/${device_id}${qs}`);
       wsRef.current = ws;
       ws.onmessage = (ev) => {
         try {
