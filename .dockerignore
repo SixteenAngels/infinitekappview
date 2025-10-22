@@ -1,0 +1,10 @@
+**/__pycache__
+**/*.pyc
+node_modules
+.git
+.env
+**/.venv
+**/.mypy_cache
+**/.pytest_cache
+**/.DS_Store
+InfinitekApp/node_modules

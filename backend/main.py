@@ -2,7 +2,10 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
+import os
 from core.config import settings
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
 from core.db import Base, engine
 from core.mqtt import mqtt_service
 from api.routers import auth, devices, measurements, rules, ota, connectors, config_sync
@@ -11,6 +14,9 @@ import services.mqtt_ingestion  # noqa: F401  # ensure MQTT handler registration
 from core.logging import configure_logging
 from core.metrics import MetricsMiddleware, router as metrics_router
 
+sentry_dsn = os.environ.get("SENTRY_DSN")
+if sentry_dsn:
+    sentry_sdk.init(dsn=sentry_dsn, integrations=[FastApiIntegration()], traces_sample_rate=0.2)
 configure_logging()
 app = FastAPI(title="Infinitek Smart Control", version="0.1.0")
 app.add_middleware(MetricsMiddleware)
