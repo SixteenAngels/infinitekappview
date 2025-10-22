@@ -9,3 +9,5 @@ passlib[bcrypt]==1.7.4
 aiofiles==23.2.1
 paho-mqtt==1.6.1
 python-multipart==0.0.9
+loguru==0.7.2
+boto3==1.35.29

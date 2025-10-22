@@ -14,6 +14,17 @@ class MQTTService:
     def connect(self) -> None:
         self.client.on_connect = self._on_connect
         self.client.on_message = self._on_message
+        # Credentials
+        if settings.MQTT_USERNAME and settings.MQTT_PASSWORD:
+            self.client.username_pw_set(settings.MQTT_USERNAME, settings.MQTT_PASSWORD)
+        # TLS
+        if settings.MQTT_TLS:
+            if settings.MQTT_TLS_CA_FILE:
+                self.client.tls_set(ca_certs=settings.MQTT_TLS_CA_FILE)
+            else:
+                self.client.tls_set()  # use default certs
+            if settings.MQTT_TLS_INSECURE:
+                self.client.tls_insecure_set(True)
         self.client.connect(settings.MQTT_BROKER, settings.MQTT_PORT, 60)
 
     def loop_start(self) -> None:

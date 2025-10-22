@@ -7,6 +7,11 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./infinitek.db"
     MQTT_BROKER: str = "broker.hivemq.com"
     MQTT_PORT: int = 1883
+    MQTT_USERNAME: str | None = None
+    MQTT_PASSWORD: str | None = None
+    MQTT_TLS: bool = False
+    MQTT_TLS_INSECURE: bool = False
+    MQTT_TLS_CA_FILE: str | None = None
     JWT_SECRET: str = "changeme"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60

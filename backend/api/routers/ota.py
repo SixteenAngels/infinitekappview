@@ -10,6 +10,7 @@ from core.config import settings
 from core.db import get_db
 from core.security import get_current_user_id
 from core.mqtt import mqtt_service
+from services.storage import storage
 
 router = APIRouter(prefix="/ota", tags=["ota"])
 
@@ -25,16 +26,11 @@ def upload_firmware(
     db: Session = Depends(get_db),
     user_id: str = Depends(get_current_user_id),
 ):
-    # Save file
+    # Save file via pluggable storage (local or S3)
     filename = f"{device_id}_{version}_{int(datetime.utcnow().timestamp())}.bin"
-    dest = OTA_DIR / filename
     content = file.file.read()
-    with open(dest, "wb") as f:
-        f.write(content)
     checksum = hashlib.sha256(content).hexdigest()
-
-    # In a real system this would be a signed, time-limited URL from S3/R2
-    download_url = f"/static/ota/{filename}"
+    download_url = storage.save_firmware_and_get_url(filename, content)
 
     # Notify device via MQTT
     mqtt_service.publish_json(

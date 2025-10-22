@@ -31,8 +31,8 @@ def handle_mqtt_message(topic: str, payload: str) -> None:
                 )
                 db.add(m)
                 db.commit()
-            # Evaluate rules (stateless stub for now)
-            rules_engine.evaluate_and_act(telemetry)
+                # Evaluate rules for the owning user
+                rules_engine.evaluate_and_act(device.owner_id, telemetry)
         finally:
             db.close()
     except Exception as e:
