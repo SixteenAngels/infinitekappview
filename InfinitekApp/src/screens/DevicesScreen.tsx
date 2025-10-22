@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, RefreshControl } from 'react-native';
 import { FAB, Text } from 'react-native-paper';
+import { useWindowDimensions } from 'react-native';
 import api from '../api/api';
 import DeviceCard, { Device } from '../components/DeviceCard';
 import { useNavigation } from '@react-navigation/native';
@@ -25,8 +26,10 @@ export default function DevicesScreen() {
     setRefreshing(false);
   };
 
+  const dim = useWindowDimensions();
+  const containerPadding = Math.max(12, (dim.width - 600) / 2);
   return (
-    <View style={{ flex: 1, padding: 12 }}>
+    <View style={{ flex: 1, paddingHorizontal: containerPadding, paddingVertical: 12 }}>
       <Text variant="titleLarge" style={{ marginBottom: 8 }}>Devices</Text>
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>

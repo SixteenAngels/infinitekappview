@@ -6,6 +6,7 @@ from core.config import settings
 from core.db import Base, engine
 from core.mqtt import mqtt_service
 from api.routers import auth, devices, measurements, rules, ota, connectors, config_sync
+from api.routers import ws as ws_router
 import services.mqtt_ingestion  # noqa: F401  # ensure MQTT handler registration
 from core.logging import configure_logging
 from core.metrics import MetricsMiddleware, router as metrics_router
@@ -29,6 +30,7 @@ app.include_router(rules.router, prefix=settings.API_PREFIX)
 app.include_router(ota.router, prefix=settings.API_PREFIX)
 app.include_router(connectors.router, prefix=settings.API_PREFIX)
 app.include_router(config_sync.router, prefix=settings.API_PREFIX)
+app.include_router(ws_router.router)
 app.include_router(metrics_router)
 
 # Mount static files for OTA downloads

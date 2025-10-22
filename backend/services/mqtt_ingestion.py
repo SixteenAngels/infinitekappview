@@ -6,6 +6,7 @@ from core.db import SessionLocal
 from models.measurement import Measurement
 from models.device import Device
 from services.rules_engine import rules_engine
+from services.ws_manager import ws_manager
 
 
 def handle_mqtt_message(topic: str, payload: str) -> None:
@@ -31,6 +32,9 @@ def handle_mqtt_message(topic: str, payload: str) -> None:
                 )
                 db.add(m)
                 db.commit()
+                # Broadcast live telemetry over WebSocket
+                import asyncio
+                asyncio.create_task(ws_manager.broadcast(device.owner_id, device_id, {"sensor": sensor, **data}))
                 # Evaluate rules for the owning user
                 rules_engine.evaluate_and_act(device.owner_id, telemetry)
         finally:

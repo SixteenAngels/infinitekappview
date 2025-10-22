@@ -1,23 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { View, useWindowDimensions, Platform } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { LineChart } from 'react-native-chart-kit';
-import api from '../api/api';
+import api, { API_BASE } from '../api/api';
 
 export default function SensorDashboard({ route }: any) {
   const { device_id } = route.params as { device_id: string };
   const [values, setValues] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
+  const dim = useWindowDimensions();
+  const chartWidth = Math.min(dim.width - 24, 800);
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
-      const res = await api.get<any[]>('/measurements', {
-        params: { device_id, sensor: 'temperature', limit: 20 },
-      });
+      // seed with recent data
+      const res = await api.get<any[]>('/measurements', { params: { device_id, sensor: 'temperature', limit: 20 } });
+      if (cancelled) return;
       const data = res.data.reverse();
       setValues(data.map((d) => d.value));
       setLabels(data.map((d) => new Date(d.created_at).toLocaleTimeString()));
+      // live websocket
+      const wsUrlBase = API_BASE.replace(/^http/, 'ws');
+      const ws = new WebSocket(`${wsUrlBase}/ws/telemetry/${device_id}`);
+      wsRef.current = ws;
+      ws.onmessage = (ev) => {
+        try {
+          const msg = JSON.parse(ev.data);
+          if (msg.sensor !== 'temperature' || typeof msg.value !== 'number') return;
+          setValues((prev) => {
+            const next = [...prev, msg.value];
+            return next.slice(-50);
+          });
+          setLabels((prev) => {
+            const next = [...prev, new Date().toLocaleTimeString()];
+            return next.slice(-50);
+          });
+        } catch {}
+      };
+      ws.onerror = () => {};
+      ws.onclose = () => {};
     })();
+    return () => {
+      cancelled = true;
+      if (wsRef.current) {
+        try { wsRef.current.close(); } catch {}
+        wsRef.current = null;
+      }
+    };
   }, [device_id]);
 
   return (
@@ -27,7 +58,7 @@ export default function SensorDashboard({ route }: any) {
         <Card.Content>
           <LineChart
             data={{ labels, datasets: [{ data: values }] }}
-            width={360}
+            width={chartWidth}
             height={220}
             chartConfig={{
               backgroundGradientFrom: '#ffffff',

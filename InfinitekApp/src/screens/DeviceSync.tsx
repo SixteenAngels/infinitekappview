@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, useWindowDimensions } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import api from '../api/api';
 
@@ -32,8 +32,10 @@ export default function DeviceSync({ route }: any) {
     }
   };
 
+  const dim = useWindowDimensions();
+  const containerPadding = Math.max(16, (dim.width - 500) / 2);
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, paddingHorizontal: containerPadding, paddingVertical: 16 }}>
       <Text variant="headlineSmall" style={{ marginBottom: 12 }}>Cloud Config Sync</Text>
       <TextInput label="Name" value={name} onChangeText={setName} style={{ marginBottom: 8 }} />
       <TextInput label="Group" value={group} onChangeText={setGroup} style={{ marginBottom: 16 }} />
