@@ -1,8 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import type { Device, DeviceCreate, Measurement, Rule, TokenResponse, UserPublic, DeviceConfig } from '../types/api';
 
-export const API_BASE = 'http://YOUR_BACKEND_IP:8000/api';
+const FALLBACK_BASE = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://127.0.0.1:8000/api';
+export const API_BASE = process.env.EXPO_PUBLIC_API_BASE ?? FALLBACK_BASE;
 
 const api = axios.create({
   baseURL: API_BASE,
