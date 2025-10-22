@@ -1,13 +1,25 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from core.db import Base, engine
 from core.mqtt import mqtt_service
 from api.routers import auth, devices, measurements, rules, ota, connectors, config_sync
 import services.mqtt_ingestion  # noqa: F401  # ensure MQTT handler registration
+from core.logging import configure_logging
+from core.metrics import MetricsMiddleware, router as metrics_router
 
+configure_logging()
 app = FastAPI(title="Infinitek Smart Control", version="0.1.0")
+app.add_middleware(MetricsMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origin_list if settings.cors_origin_list != ["*"] else ["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include API routers under prefix
 app.include_router(auth.router, prefix=settings.API_PREFIX)
@@ -17,6 +29,7 @@ app.include_router(rules.router, prefix=settings.API_PREFIX)
 app.include_router(ota.router, prefix=settings.API_PREFIX)
 app.include_router(connectors.router, prefix=settings.API_PREFIX)
 app.include_router(config_sync.router, prefix=settings.API_PREFIX)
+app.include_router(metrics_router)
 
 # Mount static files for OTA downloads
 ota_dir = Path("./ota_files")

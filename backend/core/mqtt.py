@@ -2,6 +2,7 @@ import json
 from typing import Callable, Optional
 
 import paho.mqtt.client as mqtt
+from loguru import logger
 
 from core.config import settings
 
@@ -52,7 +53,7 @@ class MQTTService:
             try:
                 self._on_message_handler(msg.topic, msg.payload.decode())
             except Exception as e:
-                print(f"on_message handler error: {e}")
+                logger.exception("on_message handler error")
 
 
 mqtt_service = MQTTService()
