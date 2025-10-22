@@ -15,13 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.infinitek.app"
     },
     "android": {
+      "package": "com.infinitek.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0f172a"
       }
-    }
+    },
+    "plugins": [
+      [
+        "sentry-expo",
+        {
+          "organization": "your-org",
+          "project": "infinitek-app"
+        }
+      ]
+    ]
   }
 }

@@ -10,7 +10,8 @@ export default function SensorDashboard({ route }: any) {
   const [values, setValues] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const dim = useWindowDimensions();
-  const chartWidth = Math.min(dim.width - 24, 800);
+  const chartWidth = Math.min(dim.width - 24, 1000);
+  const chartHeight = Math.max(220, Math.min(400, Math.floor(dim.height * 0.35)));
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function SensorDashboard({ route }: any) {
           <LineChart
             data={{ labels, datasets: [{ data: values }] }}
             width={chartWidth}
-            height={220}
+            height={chartHeight}
             chartConfig={{
               backgroundGradientFrom: '#ffffff',
               backgroundGradientTo: '#ffffff',

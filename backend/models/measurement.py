@@ -1,12 +1,16 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Float, Integer, String
+from sqlalchemy import Column, DateTime, Float, Integer, String, Index
 
 from core.db import Base
 
 
 class Measurement(Base):
     __tablename__ = "measurements"
+    __table_args__ = (
+        Index("ix_measurements_owner_device_time", "owner_id", "device_id", "created_at"),
+        Index("ix_measurements_sensor_time", "sensor", "created_at"),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
     device_id = Column(String, index=True, nullable=False)

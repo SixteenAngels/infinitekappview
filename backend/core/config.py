@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     API_PREFIX: str = "/api"
     LOG_LEVEL: str = "INFO"
-    CORS_ORIGINS: str = "*"
+    CORS_ORIGINS: str = "http://localhost:19006,http://localhost:8000"
 
     @property
     def cors_origin_list(self) -> list[str]:

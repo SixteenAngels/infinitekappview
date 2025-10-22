@@ -8,7 +8,9 @@ services:
     environment:
       - DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/infinitek
       - MQTT_BROKER=mosquitto
-      - MQTT_PORT=1883
+      - MQTT_PORT=8883
+      - MQTT_TLS=true
+      - MQTT_TLS_INSECURE=true
       - JWT_SECRET=${JWT_SECRET:-changeme}
       - API_PREFIX=/api
       - CORS_ORIGINS=*
@@ -34,10 +36,11 @@ services:
   mosquitto:
     image: eclipse-mosquitto:2
     ports:
-      - "1883:1883"
+      - "8883:8883"
     volumes:
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
+      - ./mosquitto/config:/mosquitto/config:ro
 volumes:
   db_data:
   mosquitto_data:
