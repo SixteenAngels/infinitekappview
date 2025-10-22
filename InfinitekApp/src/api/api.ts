@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Device, DeviceCreate, Measurement, Rule, TokenResponse, UserPublic, DeviceConfig } from '../types/api';
 
@@ -12,7 +13,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem('jwt_token');
+  const token = (await SecureStore.getItemAsync('jwt_token')) || (await AsyncStorage.getItem('jwt_token'));
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }

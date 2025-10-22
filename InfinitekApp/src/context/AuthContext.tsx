@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import api from '../api/api';
 
 export type AuthContextType = {
@@ -16,7 +17,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorage.getItem('jwt_token');
+      const token = (await SecureStore.getItemAsync('jwt_token')) || (await AsyncStorage.getItem('jwt_token'));
       const email = await AsyncStorage.getItem('user_email');
       if (token && email) setUser({ email });
     })();
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     const token = (res.data as any).access_token as string;
-    await AsyncStorage.setItem('jwt_token', token);
+    await SecureStore.setItemAsync('jwt_token', token);
     await AsyncStorage.setItem('user_email', email);
     setUser({ email });
   };
@@ -42,7 +43,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   };
 
   const logout = async () => {
-    await AsyncStorage.multiRemove(['jwt_token', 'user_email']);
+    await SecureStore.deleteItemAsync('jwt_token');
+    await AsyncStorage.multiRemove(['user_email']);
     setUser(null);
   };
 
