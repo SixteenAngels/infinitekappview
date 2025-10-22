@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View } from 'react-native';
+import { Card, Text, Button } from 'react-native-paper';
 
 export type Device = {
   id: number;
@@ -14,13 +15,12 @@ export default function DeviceCard({ device, onDashboard, onSync }: {
   onSync: () => void,
 }) {
   return (
-    <View style={{ padding: 12, backgroundColor: '#eee', borderRadius: 8, marginBottom: 8 }}>
-      <Text style={{ fontWeight: 'bold' }}>{device.name}</Text>
-      <Text style={{ color: '#555' }}>{device.device_id}</Text>
-      <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
-        <Button title="Dashboard" onPress={onDashboard} />
-        <Button title="Sync" onPress={onSync} />
-      </View>
-    </View>
+    <Card style={{ marginBottom: 8 }}>
+      <Card.Title title={device.name} subtitle={device.device_id} />
+      <Card.Actions>
+        <Button onPress={onDashboard}>Dashboard</Button>
+        <Button onPress={onSync}>Sync</Button>
+      </Card.Actions>
+    </Card>
   );
 }

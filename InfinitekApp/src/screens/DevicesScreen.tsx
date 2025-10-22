@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Button, RefreshControl } from 'react-native';
+import { View, RefreshControl } from 'react-native';
+import { FAB, Text } from 'react-native-paper';
 import api from '../api/api';
 import DeviceCard, { Device } from '../components/DeviceCard';
 import { useNavigation } from '@react-navigation/native';
@@ -26,19 +27,25 @@ export default function DevicesScreen() {
 
   return (
     <View style={{ flex: 1, padding: 12 }}>
-      <FlatList
-        data={devices}
-        keyExtractor={(d) => String(d.id)}
-        renderItem={({ item }) => (
-          <DeviceCard
-            device={item}
-            onDashboard={() => nav.navigate('SensorDashboard', { device_id: item.device_id })}
-            onSync={() => nav.navigate('DeviceSync', { device_id: item.device_id })}
+      <Text variant="titleLarge" style={{ marginBottom: 8 }}>Devices</Text>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          {/* @ts-expect-error RN FlatList import inline to preserve control */}
+          <require('react-native').FlatList
+            data={devices}
+            keyExtractor={(d: any) => String(d.id)}
+            renderItem={({ item }: any) => (
+              <DeviceCard
+                device={item}
+                onDashboard={() => nav.navigate('SensorDashboard', { device_id: item.device_id })}
+                onSync={() => nav.navigate('DeviceSync', { device_id: item.device_id })}
+              />
+            )}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           />
-        )}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      />
-      <Button title="Add Device" onPress={() => nav.navigate('AddDeviceScreen')} />
+        </View>
+      </View>
+      <FAB icon="plus" style={{ position: 'absolute', right: 16, bottom: 16 }} onPress={() => nav.navigate('AddDeviceScreen')} />
     </View>
   );
 }

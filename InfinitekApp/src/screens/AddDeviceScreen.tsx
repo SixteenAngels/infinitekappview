@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
 import api from '../api/api';
 
 export default function AddDeviceScreen() {
@@ -18,14 +19,11 @@ export default function AddDeviceScreen() {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 20, marginBottom: 12 }}>Add Device</Text>
-      <Text>Name</Text>
-      <TextInput style={{ backgroundColor: '#eee', padding: 8, marginBottom: 8 }} value={name} onChangeText={setName} />
-      <Text>Device ID</Text>
-      <TextInput style={{ backgroundColor: '#eee', padding: 8, marginBottom: 8 }} value={deviceId} onChangeText={setDeviceId} />
-      <Text>Group (optional)</Text>
-      <TextInput style={{ backgroundColor: '#eee', padding: 8, marginBottom: 16 }} value={group} onChangeText={setGroup} />
-      <Button title="Create" onPress={onSubmit} />
+      <Text variant="headlineSmall" style={{ marginBottom: 12 }}>Add Device</Text>
+      <TextInput label="Name" style={{ marginBottom: 8 }} value={name} onChangeText={setName} />
+      <TextInput label="Device ID" style={{ marginBottom: 8 }} value={deviceId} onChangeText={setDeviceId} />
+      <TextInput label="Group (optional)" style={{ marginBottom: 16 }} value={group} onChangeText={setGroup} />
+      <Button mode="contained" onPress={onSubmit}>Create</Button>
     </View>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text, Card } from 'react-native-paper';
 import { LineChart } from 'react-native-chart-kit';
 import api from '../api/api';
 
@@ -21,19 +22,23 @@ export default function SensorDashboard({ route }: any) {
 
   return (
     <View style={{ flex: 1, padding: 12 }}>
-      <Text style={{ fontSize: 18, marginBottom: 8 }}>Temperature</Text>
-      <LineChart
-        data={{ labels, datasets: [{ data: values }] }}
-        width={360}
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: '#ffffff',
-          backgroundGradientTo: '#ffffff',
-          color: () => '#2a9d8f',
-          labelColor: () => '#222',
-        }}
-        bezier
-      />
+      <Text variant="titleLarge" style={{ marginBottom: 8 }}>Temperature</Text>
+      <Card>
+        <Card.Content>
+          <LineChart
+            data={{ labels, datasets: [{ data: values }] }}
+            width={360}
+            height={220}
+            chartConfig={{
+              backgroundGradientFrom: '#ffffff',
+              backgroundGradientTo: '#ffffff',
+              color: () => '#2a9d8f',
+              labelColor: () => '#222',
+            }}
+            bezier
+          />
+        </Card.Content>
+      </Card>
     </View>
   );
 }

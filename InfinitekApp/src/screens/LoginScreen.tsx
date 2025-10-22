@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
@@ -21,23 +22,12 @@ export default function LoginScreen() {
 
   return (
     <View style={{ flex: 1, padding: 20, justifyContent: 'center' }}>
-      <Text style={{ fontSize: 24, marginBottom: 16 }}>Login</Text>
-      <Text>Email</Text>
-      <TextInput
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-        style={{ backgroundColor: '#eee', padding: 10, marginBottom: 12 }}
-      />
-      <Text>Password</Text>
-      <TextInput
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        style={{ backgroundColor: '#eee', padding: 10, marginBottom: 12 }}
-      />
-      <Button title={loading ? 'Loading...' : 'Login'} onPress={onSubmit} disabled={loading} />
+      <Text variant="headlineMedium" style={{ marginBottom: 16 }}>Login</Text>
+      <TextInput label="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} style={{ marginBottom: 12 }} />
+      <TextInput label="Password" secureTextEntry value={password} onChangeText={setPassword} style={{ marginBottom: 12 }} />
+      <Button mode="contained" onPress={onSubmit} disabled={loading}>
+        {loading ? 'Loading...' : 'Login'}
+      </Button>
     </View>
   );
 }

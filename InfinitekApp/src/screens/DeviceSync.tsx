@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
 import api from '../api/api';
 
 export default function DeviceSync({ route }: any) {
@@ -33,12 +34,10 @@ export default function DeviceSync({ route }: any) {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 12 }}>Cloud Config Sync</Text>
-      <Text>Name</Text>
-      <TextInput value={name} onChangeText={setName} style={{ backgroundColor: '#eee', padding: 8, marginBottom: 8 }} />
-      <Text>Group</Text>
-      <TextInput value={group} onChangeText={setGroup} style={{ backgroundColor: '#eee', padding: 8, marginBottom: 16 }} />
-      <Button title="Sync" onPress={sync} />
+      <Text variant="headlineSmall" style={{ marginBottom: 12 }}>Cloud Config Sync</Text>
+      <TextInput label="Name" value={name} onChangeText={setName} style={{ marginBottom: 8 }} />
+      <TextInput label="Group" value={group} onChangeText={setGroup} style={{ marginBottom: 16 }} />
+      <Button mode="contained" onPress={sync}>Sync</Button>
     </View>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
 import api from '../api/api';
 
 export default function RulesBuilder() {

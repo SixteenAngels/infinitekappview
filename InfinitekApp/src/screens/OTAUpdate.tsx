@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import api from '../api/api';
 
@@ -35,14 +36,12 @@ export default function OTAUpdate() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 12 }}>OTA Update</Text>
-      <Text>Device ID</Text>
-      <TextInput value={deviceId} onChangeText={setDeviceId} style={{ backgroundColor: '#eee', padding: 8, marginBottom: 8 }} />
-      <Text>Version</Text>
-      <TextInput value={version} onChangeText={setVersion} style={{ backgroundColor: '#eee', padding: 8, marginBottom: 8 }} />
-      <Button title="Pick firmware" onPress={pickFile} />
+      <Text variant="headlineSmall" style={{ marginBottom: 12 }}>OTA Update</Text>
+      <TextInput label="Device ID" value={deviceId} onChangeText={setDeviceId} style={{ marginBottom: 8 }} />
+      <TextInput label="Version" value={version} onChangeText={setVersion} style={{ marginBottom: 8 }} />
+      <Button onPress={pickFile} mode="outlined">Pick firmware</Button>
       <View style={{ height: 8 }} />
-      <Button title="Upload" onPress={upload} />
+      <Button onPress={upload} mode="contained">Upload</Button>
     </View>
   );
 }
