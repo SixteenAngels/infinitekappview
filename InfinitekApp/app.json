@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "InfinitekApp",
+    "slug": "infinitek-app",
+    "scheme": "infinitek",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.infinitek.app"
+    },
+    "android": {
+      "package": "com.infinitek.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f172a"
+      }
+    },
+    "plugins": [
+      [
+        "sentry-expo",
+        {
+          "organization": "your-org",
+          "project": "infinitek-app"
+        }
+      ]
+    ]
+  }
+}
